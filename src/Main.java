@@ -49,39 +49,32 @@ public class Main {
                     + citizens[index].age + "\t" + "NIF: " + citizens[index].getVatNumber() + "\t" + "NIC: " + citizens[index].getCiNumber() + "\n");
         }
         System.out.print("Clique 0 para voltar ao menu: ");
-        menuOption = scanner.nextLine();
-        if (menuOption.equals("0")) {
-            return;
-        }
     }
 
     public static PortugueseCitizen[] deleteFromArray(PortugueseCitizen[] citizens, Integer index) {
-        PortugueseCitizen[] arrayDeleted = null;
+        PortugueseCitizen[] arrayDeleted = new PortugueseCitizen[citizens.length - 1];
 
-        for(int i = 0; i < citizens.length; i++) {
-            if (i == index) {
+        for(int i = 0; i < citizens.length && citizens[i] != null; i++) {
+            if (index.equals(i)) {
                 continue;
             }
             arrayDeleted[i] = citizens[i];
         }
 
+        for (PortugueseCitizen citizen: citizens) {
+            System.out.println(citizen);
+        }
         return arrayDeleted;
     }
 
     public static PortugueseCitizen[] deleteCitizen(PortugueseCitizen[] citizens, Scanner scanner) {
         clearScreen();
-        String menuOption = new String();
-        if (citizens[0] == null) {
-            System.out.println("A lista está vazia, por favor retorne ao menu e adicione um cidadão!\n");
-        }
-        for(int index = 0; index < citizens.length && citizens[index] != null; index++) {
-            System.out.println((index + 1) + "-" + " " + "Nome: " + citizens[index].name + "\t" + "Idade: "
-                    + citizens[index].age + "\t" + "NIF: " + citizens[index].getVatNumber() + "\t" + "NIC: " + citizens[index].getCiNumber() + "\n");
-        }
-        System.out.print("Clique 0 para voltar ao menu: ");
-        menuOption = scanner.nextLine();
+        printCitizens(citizens, scanner);
         System.out.print("Insira o número do cidadão que pretende apagar: ");
         String indexToDelete = scanner.nextLine();
+        if (indexToDelete.equals("0")){
+            return null;
+        }
         Integer index = Integer.parseInt(indexToDelete);
         citizens = deleteFromArray(citizens, index);
         return citizens;
@@ -94,7 +87,7 @@ public class Main {
         PortugueseCitizen[] citizens = new PortugueseCitizen[1000];
         int citizenIndex = 0;
 
-        while(!menuOption.equals("3")) {
+        while(!menuOption.equals("4")) {
             clearScreen();
             if(menuOption.equals("1")) {
                 citizens[citizenIndex] = addCitizenMenu(scanner);
@@ -104,16 +97,17 @@ public class Main {
             }
             else if(menuOption.equals("2")) {
                 printCitizens(citizens, scanner);
+                menuOption = scanner.nextLine();
                 menuOption = initialMenu(scanner);
                 continue;
             }
             else if(menuOption.equals("3")) {
-                deleteCitizen(citizens, scanner);
+                citizens = deleteCitizen(citizens, scanner);
                 menuOption = initialMenu(scanner);
                 continue;
             }
             else {
-                initialMenu(scanner);
+                menuOption = initialMenu(scanner);
                 continue;
             }
         }
